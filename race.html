@@ -1,0 +1,2876 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lamborghini Racer - Гоночная трасса</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            margin: 0;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #000000, #1a0b00, #000000);
+            font-family: 'Rajdhani', sans-serif;
+            overflow: hidden;
+            box-sizing: border-box;
+            touch-action: manipulation;
+        }
+        
+        /* Главное меню в стиле Lamborghini */
+        #main-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #000000, #2b1100, #000000);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.5s;
+        }
+        
+        .menu-title {
+            font-size: 42px;
+            color: #ff8c00;
+            margin-bottom: 30px;
+            text-shadow: 0 0 30px rgba(255, 140, 0, 0.8);
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            font-weight: 700;
+            background: linear-gradient(45deg, #ff8c00, #ffd700, #ff8c00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .menu-section {
+            background: rgba(0,0,0,0.8);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 12px 0;
+            backdrop-filter: blur(10px);
+            border: 2px solid #ff8c00;
+            min-width: 420px;
+            box-shadow: 0 0 20px rgba(255, 140, 0, 0.3);
+        }
+        
+        .section-title {
+            color: #ffd700;
+            font-size: 20px;
+            margin-bottom: 18px;
+            text-align: center;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .selection-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            justify-items: center;
+        }
+        
+        .selection-option {
+            width: 70px;
+            height: 70px;
+            border: 2px solid #333;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: rgba(20,20,20,0.9);
+        }
+        
+        .selection-option:hover {
+            transform: scale(1.1);
+            border-color: #ff8c00;
+            box-shadow: 0 0 15px rgba(255, 140, 0, 0.5);
+        }
+        
+        .selection-option.selected {
+            border-color: #ffd700;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.7);
+            background: rgba(40,30,0,0.9);
+        }
+        
+        .option-preview {
+            width: 45px;
+            height: 25px;
+            border-radius: 3px;
+            margin-bottom: 6px;
+            border: 1px solid #444;
+        }
+        
+        .option-name {
+            color: #ffd700;
+            font-size: 10px;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        .menu-btn {
+            padding: 14px 35px;
+            font-size: 16px;
+            background: linear-gradient(45deg, #ff8c00, #ff6b00);
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 15px 8px;
+            box-shadow: 0 6px 20px rgba(255, 140, 0, 0.4);
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+            font-family: 'Rajdhani', sans-serif;
+        }
+        
+        .menu-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 140, 0, 0.6);
+            background: linear-gradient(45deg, #ff6b00, #ff8c00);
+        }
+        
+        .menu-btn.secondary {
+            background: linear-gradient(45deg, #000000, #333333);
+            color: #ffd700;
+            border: 2px solid #ffd700;
+        }
+        
+        .menu-btn.secondary:hover {
+            background: linear-gradient(45deg, #333333, #000000);
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4);
+        }
+        
+        .btn-container {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+        
+        /* Таблица лидеров */
+        #leaderboard-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #000000, #2b1100, #000000);
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1001;
+        }
+        
+        .leaderboard-container {
+            background: rgba(0,0,0,0.9);
+            padding: 30px;
+            border-radius: 15px;
+            border: 3px solid #ff8c00;
+            box-shadow: 0 0 30px rgba(255, 140, 0, 0.5);
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .leaderboard-title {
+            color: #ffd700;
+            font-size: 28px;
+            text-align: center;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
+        }
+        
+        .leaderboard-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .leaderboard-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 15px;
+            margin: 8px 0;
+            background: rgba(255, 140, 0, 0.1);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 140, 0, 0.3);
+            transition: all 0.3s;
+        }
+        
+        .leaderboard-item:hover {
+            background: rgba(255, 140, 0, 0.2);
+            transform: translateX(5px);
+        }
+        
+        .leaderboard-item.current-player {
+            background: rgba(255, 215, 0, 0.2);
+            border: 2px solid #ffd700;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+        }
+        
+        .leaderboard-rank {
+            font-size: 18px;
+            font-weight: 700;
+            color: #ffd700;
+            min-width: 30px;
+            text-align: center;
+        }
+        
+        .rank-1 { color: #ffd700; text-shadow: 0 0 10px #ffd700; }
+        .rank-2 { color: #c0c0c0; text-shadow: 0 0 8px #c0c0c0; }
+        .rank-3 { color: #cd7f32; text-shadow: 0 0 6px #cd7f32; }
+        
+        .leaderboard-player {
+            flex: 1;
+            margin: 0 15px;
+            color: #ffffff;
+            font-weight: 600;
+        }
+        
+        .leaderboard-score {
+            font-size: 16px;
+            font-weight: 700;
+            color: #ff8c00;
+            min-width: 80px;
+            text-align: right;
+        }
+        
+        .leaderboard-date {
+            font-size: 12px;
+            color: #888;
+            margin-left: 10px;
+        }
+        
+        .player-stats {
+            font-size: 11px;
+            color: #aaa;
+            margin-top: 4px;
+        }
+        
+        .leaderboard-stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 140, 0, 0.3);
+        }
+        
+        .stat-item {
+            text-align: center;
+            color: #ffd700;
+        }
+        
+        .stat-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #ff8c00;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #888;
+            text-transform: uppercase;
+        }
+        
+        /* Игровой контейнер */
+        #game-wrapper {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        /* Панель выбора машин в игре */
+        #car-selection-panel {
+            display: flex;
+            gap: 12px;
+            width: 420px;
+            margin-bottom: 8px;
+            padding: 12px;
+            background: rgba(0,0,0,0.9);
+            border-radius: 10px;
+            border: 2px solid #ff8c00;
+            justify-content: center;
+            box-shadow: 0 0 15px rgba(255, 140, 0, 0.3);
+        }
+        
+        .car-option {
+            width: 55px;
+            height: 70px;
+            border: 2px solid #333;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(20,20,20,0.9);
+        }
+        
+        .car-option:hover {
+            transform: scale(1.1);
+            border-color: #ff8c00;
+            box-shadow: 0 0 12px rgba(255, 140, 0, 0.4);
+        }
+        
+        .car-option.selected {
+            border-color: #ffd700;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+            background: rgba(40,30,0,0.9);
+        }
+        
+        .car-preview {
+            width: 35px;
+            height: 50px;
+            border-radius: 4px 4px 2px 2px;
+            margin-bottom: 4px;
+            border: 1px solid #444;
+        }
+        
+        .car-name {
+            color: #ffd700;
+            font-size: 9px;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        #game-container {
+            position: relative;
+            width: 420px;
+            height: 620px;
+            overflow: hidden;
+            border-radius: 12px;
+            transform: perspective(500px) rotateX(5deg);
+            box-shadow: 0 0 30px rgba(255, 140, 0, 0.4);
+        }
+        
+        /* Стили дорог */
+        #road {
+            position: absolute;
+            width: 260px;
+            height: 120%;
+            left: 80px;
+            top: -10%;
+            overflow: hidden;
+        }
+        
+        /* Городская дорога - Италия */
+        .road-city {
+            background: linear-gradient(90deg, 
+                #7f8c8d 0%, 
+                #5d6d7e 15%, 
+                #5d6d7e 85%, 
+                #7f8c8d 100%);
+            border-left: 12px solid #ff8c00;
+            border-right: 12px solid #ff8c00;
+        }
+        
+        /* Шоссе - Германия */
+        .road-highway {
+            background: linear-gradient(90deg, 
+                #95a5a6 0%, 
+                #7f8c8d 20%, 
+                #7f8c8d 80%, 
+                #95a5a6 100%);
+            border-left: 12px solid #e74c3c;
+            border-right: 12px solid #e74c3c;
+        }
+        
+        /* Ночная трасса - Монако */
+        .road-night {
+            background: linear-gradient(90deg, 
+                #2c3e50 0%, 
+                #34495e 20%, 
+                #34495e 80%, 
+                #2c3e50 100%);
+            border-left: 12px solid #3498db;
+            border-right: 12px solid #3498db;
+        }
+        
+        /* Загородная дорога - Тоскана */
+        .road-country {
+            background: linear-gradient(90deg, 
+                #27ae60 0%, 
+                #2ecc71 20%, 
+                #2ecc71 80%, 
+                #27ae60 100%);
+            border-left: 12px solid #f39c12;
+            border-right: 12px solid #f39c12;
+        }
+        
+        /* Пустыня - Дубай */
+        .road-desert {
+            background: linear-gradient(90deg, 
+                #d35400 0%, 
+                #e67e22 20%, 
+                #e67e22 80%, 
+                #d35400 100%);
+            border-left: 12px solid #f1c40f;
+            border-right: 12px solid #f1c40f;
+        }
+        
+        /* Зимняя трасса - Альпы */
+        .road-winter {
+            background: linear-gradient(90deg, 
+                #ecf0f1 0%, 
+                #bdc3c7 20%, 
+                #bdc3c7 80%, 
+                #ecf0f1 100%);
+            border-left: 12px solid #3498db;
+            border-right: 12px solid #3498db;
+        }
+        
+        /* Роскошная трасса - Монако ночь */
+        .road-luxury {
+            background: linear-gradient(90deg, 
+                #8B4513 0%, 
+                #A0522D 20%, 
+                #A0522D 80%, 
+                #8B4513 100%);
+            border-left: 12px solid #FFD700;
+            border-right: 12px solid #FFD700;
+        }
+        
+        /* Техно трасса - будущее */
+        .road-tech {
+            background: linear-gradient(90deg, 
+                #2C3E50 0%, 
+                #34495E 20%, 
+                #34495E 80%, 
+                #2C3E50 100%);
+            border-left: 12px solid #00FFFF;
+            border-right: 12px solid #00FFFF;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+        }
+        
+        .lane-mark {
+            position: absolute;
+            width: 5px;
+            height: 30px;
+            left: 124px;
+            opacity: 0.9;
+            animation: moveMark linear infinite;
+        }
+        
+        /* Разные цвета разметки для разных дорог */
+        .road-city .lane-mark { background: #ffffff; }
+        .road-highway .lane-mark { background: #e74c3c; box-shadow: 0 0 10px rgba(231, 76, 60, 0.5); }
+        .road-night .lane-mark { background: #3498db; box-shadow: 0 0 10px rgba(52, 152, 219, 0.5); }
+        .road-country .lane-mark { background: #f39c12; box-shadow: 0 0 10px rgba(243, 156, 18, 0.5); }
+        .road-desert .lane-mark { background: #f1c40f; box-shadow: 0 0 10px rgba(241, 196, 15, 0.5); }
+        .road-winter .lane-mark { background: #3498db; box-shadow: 0 0 10px rgba(52, 152, 219, 0.5); }
+        .road-luxury .lane-mark { background: #FFD700; box-shadow: 0 0 15px rgba(255, 215, 0, 0.7); }
+        .road-tech .lane-mark { 
+            background: #00FFFF; 
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.7);
+            border-radius: 2px;
+        }
+        
+        @keyframes moveMark {
+            from { transform: translateY(-30px); }
+            to { transform: translateY(620px); }
+        }
+        
+        /* Фоны для разных дорог */
+        .road-city-bg { background: linear-gradient(to bottom, #1e8449, #145a32); }
+        .road-highway-bg { background: linear-gradient(to bottom, #34495e, #2c3e50); }
+        .road-night-bg { background: linear-gradient(to bottom, #2c3e50, #1a252f); }
+        .road-country-bg { background: linear-gradient(to bottom, #27ae60, #229954); }
+        .road-desert-bg { background: linear-gradient(to bottom, #e67e22, #d35400); }
+        .road-winter-bg { background: linear-gradient(to bottom, #3498db, #2980b9); }
+        .road-luxury-bg { 
+            background: linear-gradient(to bottom, #8B0000, #4B0082); 
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(255, 215, 0, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(255, 140, 0, 0.1) 0%, transparent 50%);
+        }
+        .road-tech-bg { 
+            background: linear-gradient(to bottom, #0a0a2a, #00001a);
+            background-image: 
+                radial-gradient(circle at 20% 20%, rgba(0, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 0, 255, 0.1) 0%, transparent 50%);
+        }
+        
+        /* Стили машин в стиле Lamborghini */
+        #player-car {
+            position: absolute;
+            width: 48px;
+            height: 80px;
+            bottom: 30px;
+            left: 186px;
+            transition: transform 0.1s, left 0.2s ease-out;
+            z-index: 5;
+            border-radius: 8px 8px 4px 4px;
+        }
+        
+        /* Aventador - оранжевый */
+        .car-aventador {
+            background: linear-gradient(45deg, #ff8c00, #ff6b00, #ff8c00);
+            clip-path: polygon(0 20%, 15% 0, 85% 0, 100% 20%, 100% 80%, 85% 100%, 15% 100%, 0 80%);
+        }
+        
+        .car-aventador .car-window {
+            background: linear-gradient(45deg, #001122, #003366);
+            clip-path: polygon(10% 0, 90% 0, 85% 100%, 15% 100%);
+        }
+        
+        /* Huracan - зеленый */
+        .car-huracan {
+            background: linear-gradient(45deg, #00ff00, #00cc00, #00ff00);
+            clip-path: polygon(0 15%, 20% 0, 80% 0, 100% 15%, 100% 85%, 80% 100%, 20% 100%, 0 85%);
+        }
+        
+        .car-huracan .car-window {
+            background: linear-gradient(45deg, #001122, #003366);
+            clip-path: polygon(15% 0, 85% 0, 80% 100%, 20% 100%);
+        }
+        
+        /* Murcielago - желтый */
+        .car-murcielago {
+            background: linear-gradient(45deg, #ffd700, #ffed4e, #ffd700);
+            clip-path: polygon(0 25%, 10% 0, 90% 0, 100% 25%, 100% 75%, 90% 100%, 10% 100%, 0 75%);
+        }
+        
+        .car-murcielago .car-window {
+            background: linear-gradient(45deg, #001122, #003366);
+            clip-path: polygon(5% 0, 95% 0, 90% 100%, 10% 100%);
+        }
+        
+        /* Sian - фиолетовый */
+        .car-sian {
+            background: linear-gradient(45deg, #8a2be2, #6a0dad, #8a2be2);
+            clip-path: polygon(0 30%, 25% 0, 75% 0, 100% 30%, 100% 70%, 75% 100%, 25% 100%, 0 70%);
+        }
+        
+        .car-sian .car-window {
+            background: linear-gradient(45deg, #001122, #003366);
+            clip-path: polygon(20% 0, 80% 0, 75% 100%, 25% 100%);
+        }
+        
+        /* Urus - черный */
+        .car-urus {
+            background: linear-gradient(45deg, #2f2f2f, #1a1a1a, #2f2f2f);
+            clip-path: polygon(0 10%, 30% 0, 70% 0, 100% 10%, 100% 90%, 70% 100%, 30% 100%, 0 90%);
+            height: 85px;
+        }
+        
+        .car-urus .car-window {
+            background: linear-gradient(45deg, #001122, #003366);
+            clip-path: polygon(25% 0, 75% 0, 70% 100%, 30% 100%);
+            width: 30px;
+        }
+        
+        /* Countach - белый */
+        .car-countach {
+            background: linear-gradient(45deg, #ffffff, #e6e6e6, #ffffff);
+            clip-path: polygon(0 40%, 5% 0, 95% 0, 100% 40%, 100% 60%, 95% 100%, 5% 100%, 0 60%);
+        }
+        
+        .car-countach .car-window {
+            background: linear-gradient(45deg, #001122, #003366);
+            clip-path: polygon(0 0, 100% 0, 95% 100%, 5% 100%);
+        }
+        
+        .car-window {
+            position: absolute;
+            width: 28px;
+            height: 20px;
+            top: 15px;
+            left: 10px;
+        }
+        
+        .car-details {
+            position: absolute;
+            width: 80%;
+            height: 6px;
+            bottom: 20px;
+            left: 10%;
+            background: #1a1a1a;
+            border-radius: 2px;
+        }
+        
+        .car-headlights {
+            position: absolute;
+            width: 8px;
+            height: 5px;
+            background: #ffd700;
+            bottom: 12px;
+            border-radius: 1px;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
+        }
+        
+        .car-headlights.left {
+            left: 8px;
+        }
+        
+        .car-headlights.right {
+            right: 8px;
+        }
+
+        .lambo-logo {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: #ffd700;
+            top: 5px;
+            left: 18px;
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+        }
+
+        /* Стили для препятствий и бонусов */
+        .obstacle, .bonus {
+            position: absolute;
+            width: 48px;
+            height: 80px;
+            z-index: 4;
+            border-radius: 6px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+            transition: transform 0.3s;
+        }
+        
+        .obstacle.lane-0 { 
+            background: linear-gradient(45deg, #ff4444, #cc0000);
+            clip-path: polygon(0 20%, 20% 0, 80% 0, 100% 20%, 100% 80%, 80% 100%, 20% 100%, 0 80%);
+        }
+        .obstacle.lane-1 { 
+            background: linear-gradient(45deg, #4444ff, #0000cc);
+            clip-path: polygon(0 25%, 15% 0, 85% 0, 100% 25%, 100% 75%, 85% 100%, 15% 100%, 0 75%);
+        }
+        .obstacle.lane-2 { 
+            background: linear-gradient(45deg, #44ff44, #00cc00);
+            clip-path: polygon(0 30%, 25% 0, 75% 0, 100% 30%, 100% 70%, 75% 100%, 25% 100%, 0 70%);
+        }
+        
+        /* Специальные препятствия */
+        .obstacle.truck {
+            width: 48px;
+            height: 120px;
+            background: linear-gradient(45deg, #8B4513, #A0522D);
+            clip-path: polygon(0 15%, 10% 0, 90% 0, 100% 15%, 100% 85%, 90% 100%, 10% 100%, 0 85%);
+        }
+        
+        .obstacle.truck .obstacle-window {
+            height: 25px;
+            top: 10px;
+        }
+        
+        .obstacle-window {
+            position: absolute;
+            width: 25px;
+            height: 18px;
+            background: #001122;
+            top: 15px;
+            left: 12px;
+            border-radius: 2px;
+        }
+        
+        /* Бонусы */
+        .bonus {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            animation: float 3s ease-in-out infinite;
+            z-index: 6;
+        }
+        
+        .bonus.slow-down {
+            background: radial-gradient(circle at 30% 30%, #4169E1, #0000FF);
+            box-shadow: 0 0 20px #4169E1;
+        }
+        
+        .bonus.shield {
+            background: radial-gradient(circle at 30% 30%, #00ffff, #0088ff);
+            box-shadow: 0 0 20px #00ffff;
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+        }
+        
+        .bonus.points {
+            background: radial-gradient(circle at 30% 30%, #00ff00, #00cc00);
+            box-shadow: 0 0 20px #00ff00;
+            clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+        }
+        
+        .bonus.multiplier {
+            background: radial-gradient(circle at 30% 30%, #ff00ff, #cc00cc);
+            box-shadow: 0 0 20px #ff00ff;
+            clip-path: polygon(20% 0%, 80% 0%, 100% 20%, 100% 80%, 80% 100%, 20% 100%, 0% 80%, 0% 20%);
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        /* Эффект щита */
+        .shield-effect {
+            position: absolute;
+            width: 70px;
+            height: 100px;
+            border: 3px solid #00ffff;
+            border-radius: 35px;
+            top: -10px;
+            left: -11px;
+            box-shadow: 0 0 20px #00ffff;
+            animation: shieldPulse 2s infinite;
+            display: none;
+            z-index: 3;
+        }
+        
+        @keyframes shieldPulse {
+            0%, 100% { opacity: 0.7; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.05); }
+        }
+        
+        /* Эффекты частиц */
+        .particle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10;
+        }
+        
+        .smoke-particle {
+            background: #666;
+            animation: smokeFloat 1.5s forwards;
+        }
+        
+        .spark-particle {
+            background: #ffd700;
+            animation: sparkFlash 0.5s forwards;
+        }
+        
+        .explosion-particle {
+            background: #ff4400;
+            animation: explode 1s forwards;
+        }
+        
+        @keyframes smokeFloat {
+            0% { transform: translate(0, 0) scale(1); opacity: 1; }
+            100% { transform: translate(var(--tx, 0), var(--ty, -50px)) scale(3); opacity: 0; }
+        }
+        
+        @keyframes sparkFlash {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(0); opacity: 0; }
+        }
+        
+        @keyframes explode {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(3); opacity: 0; }
+        }
+        
+        /* Следы от шин */
+        .tire-mark {
+            position: absolute;
+            width: 6px;
+            height: 30px;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 3px;
+            z-index: 2;
+            opacity: 0;
+            animation: tireMarkFade 2s forwards;
+        }
+        
+        @keyframes tireMarkFade {
+            0% { opacity: 0.8; }
+            100% { opacity: 0; }
+        }
+        
+        /* Верхняя панель информации */
+        #top-panel {
+            display: flex;
+            justify-content: space-between;
+            width: 420px;
+            margin-bottom: 8px;
+        }
+        
+        .top-info {
+            color: #ffd700;
+            font-size: 14px;
+            font-weight: 600;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+            background: rgba(0,0,0,0.8);
+            padding: 8px 15px;
+            border-radius: 8px;
+            border: 2px solid #ff8c00;
+            font-family: 'Rajdhani', sans-serif;
+        }
+        
+        #best-score {
+            background: linear-gradient(45deg, #ff8c00, #ff6b00);
+            color: #000;
+            border-color: #ffd700;
+            font-weight: 700;
+        }
+        
+        /* Панель информации в игре */
+        #info-panel {
+            position: absolute;
+            top: 10px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 25px;
+            z-index: 10;
+        }
+        
+        .info-item {
+            color: #ffd700;
+            font-size: 14px;
+            font-weight: 600;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+            background: rgba(0,0,0,0.7);
+            padding: 6px 12px;
+            border-radius: 8px;
+            border: 1px solid #ff8c00;
+            font-family: 'Rajdhani', sans-serif;
+        }
+        
+        /* Индикаторы активных бонусов */
+        .active-bonus {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 12px;
+            color: #00ffff;
+            text-shadow: 0 0 5px #00ffff;
+        }
+        
+        .bonus-timer {
+            width: 30px;
+            height: 4px;
+            background: #333;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        
+        .bonus-timer-fill {
+            height: 100%;
+            background: #00ffff;
+            transition: width 1s linear;
+        }
+        
+        /* Панель управления скоростью */
+        #speed-control-panel {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            width: 420px;
+            margin-top: 12px;
+            padding: 15px;
+            background: rgba(0,0,0,0.9);
+            border-radius: 12px;
+            border: 2px solid #ff8c00;
+            box-shadow: 0 0 15px rgba(255, 140, 0, 0.3);
+        }
+        
+        #speed-control {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .speed-btn {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(45deg, #ff8c00, #ff6b00);
+            border: none;
+            border-radius: 8px;
+            color: #000;
+            font-size: 22px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            box-shadow: 0 4px 8px rgba(255, 140, 0, 0.4);
+            font-family: 'Rajdhani', sans-serif;
+        }
+        
+        .speed-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 12px rgba(255, 140, 0, 0.6);
+        }
+        
+        .speed-btn:active {
+            transform: scale(0.95);
+        }
+        
+        #slow-btn {
+            background: linear-gradient(45deg, #333333, #666666);
+            color: #ffd700;
+        }
+        
+        #current-speed-display {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        #current-speed {
+            color: #ffd700;
+            font-size: 22px;
+            font-weight: 700;
+            min-width: 100px;
+            text-align: center;
+            background: rgba(255, 140, 0, 0.1);
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: 2px solid #ff8c00;
+            font-family: 'Rajdhani', sans-serif;
+        }
+        
+        #speed-percent {
+            color: #ff8c00;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        /* Индикатор уровня скорости */
+        #speed-level {
+            display: flex;
+            gap: 8px;
+            margin-top: 5px;
+        }
+        
+        .speed-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #333;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+        
+        .speed-dot.active {
+            background: #ff8c00;
+            box-shadow: 0 0 10px #ff8c00;
+            border-color: #ffd700;
+        }
+        
+        .speed-dot.super-active {
+            background: #ffd700;
+            box-shadow: 0 0 15px #ffd700;
+            animation: pulse 0.5s infinite alternate;
+            border-color: #ffffff;
+        }
+        
+        @keyframes pulse {
+            from { transform: scale(1); }
+            to { transform: scale(1.2); }
+        }
+        
+        /* Эффект скорости */
+        .speed-effect {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at center, transparent 0%, rgba(255, 140, 0, 0.1) 100%);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+        
+        /* Остальные стили остаются аналогичными с обновленными цветами */
+        #pause-menu {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.95);
+            color: #ffd700;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 25;
+            border-radius: 12px;
+            font-family: 'Rajdhani', sans-serif;
+        }
+        
+        #pause-menu h2 {
+            font-size: 32px;
+            margin-bottom: 20px;
+            color: #ff8c00;
+            text-shadow: 0 0 20px rgba(255, 140, 0, 0.7);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+        
+        .controls-info {
+            background: rgba(255, 140, 0, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            text-align: center;
+            border: 2px solid #ff8c00;
+        }
+        
+        .control-item {
+            margin: 8px 0;
+            font-size: 14px;
+            color: #ffd700;
+        }
+        
+        #game-over {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.95);
+            color: #ffd700;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 20;
+            border-radius: 12px;
+            font-family: 'Rajdhani', sans-serif;
+        }
+        
+        #game-over h2 {
+            font-size: 32px;
+            margin-bottom: 20px;
+            color: #ff4444;
+            text-shadow: 0 0 20px rgba(255, 68, 68, 0.7);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+        
+        .record-badge {
+            background: linear-gradient(45deg, #ff8c00, #ffd700);
+            padding: 10px 20px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-weight: 700;
+            box-shadow: 0 0 20px rgba(255, 140, 0, 0.5);
+            color: #000;
+        }
+        
+        button {
+            padding: 12px 25px;
+            font-size: 16px;
+            background: linear-gradient(45deg, #ff8c00, #ff6b00);
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 15px;
+            box-shadow: 0 4px 15px rgba(255, 140, 0, 0.4);
+            transition: all 0.3s;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-family: 'Rajdhani', sans-serif;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 140, 0, 0.6);
+        }
+        
+        #resume-btn {
+            background: linear-gradient(45deg, #00cc00, #00ff00);
+            color: #000;
+        }
+        
+        #back-to-menu {
+            background: linear-gradient(45deg, #333333, #666666);
+            color: #ffd700;
+            border: 2px solid #ffd700;
+        }
+
+        /* Сенсорные кнопки */
+        #touch-controls {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            justify-content: space-between;
+            padding: 0 30px;
+            z-index: 30;
+        }
+        
+        .touch-btn {
+            width: 65px;
+            height: 65px;
+            background: rgba(255, 140, 0, 0.2);
+            border: 3px solid rgba(255, 140, 0, 0.5);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #ffd700;
+            font-weight: 700;
+            backdrop-filter: blur(10px);
+            user-select: none;
+            -webkit-user-select: none;
+            font-family: 'Rajdhani', sans-serif;
+        }
+        
+        @media (max-width: 768px) {
+            #touch-controls {
+                display: flex;
+            }
+            
+            .menu-section {
+                min-width: 90vw;
+            }
+            
+            #game-container, #speed-control-panel, #car-selection-panel, #top-panel {
+                width: 95vw;
+            }
+            
+            #game-container {
+                height: 65vh;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Главное меню -->
+    <div id="main-menu">
+        <h1 class="menu-title">Lamborghini Racer</h1>
+        
+        <div class="menu-section">
+            <h2 class="section-title">Выберите модель</h2>
+            <div class="selection-grid" id="car-selection">
+                <div class="selection-option selected" data-car="aventador">
+                    <div class="option-preview" style="background: linear-gradient(45deg, #ff8c00, #ff6b00)"></div>
+                    <div class="option-name">Aventador</div>
+                </div>
+                <div class="selection-option" data-car="huracan">
+                    <div class="option-preview" style="background: linear-gradient(45deg, #00ff00, #00cc00)"></div>
+                    <div class="option-name">Huracan</div>
+                </div>
+                <div class="selection-option" data-car="murcielago">
+                    <div class="option-preview" style="background: linear-gradient(45deg, #ffd700, #ffed4e)"></div>
+                    <div class="option-name">Murcielago</div>
+                </div>
+                <div class="selection-option" data-car="sian">
+                    <div class="option-preview" style="background: linear-gradient(45deg, #8a2be2, #6a0dad)"></div>
+                    <div class="option-name">Sian</div>
+                </div>
+                <div class="selection-option" data-car="urus">
+                    <div class="option-preview" style="background: linear-gradient(45deg, #2f2f2f, #1a1a1a)"></div>
+                    <div class="option-name">Urus</div>
+                </div>
+                <div class="selection-option" data-car="countach">
+                    <div class="option-preview" style="background: linear-gradient(45deg, #ffffff, #e6e6e6)"></div>
+                    <div class="option-name">Countach</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="menu-section">
+            <h2 class="section-title">Выберите трассу</h2>
+            <div class="selection-grid" id="road-selection">
+                <div class="selection-option selected" data-road="city">
+                    <div class="option-preview road-city"></div>
+                    <div class="option-name">Италия</div>
+                </div>
+                <div class="selection-option" data-road="highway">
+                    <div class="option-preview road-highway"></div>
+                    <div class="option-name">Германия</div>
+                </div>
+                <div class="selection-option" data-road="night">
+                    <div class="option-preview road-night"></div>
+                    <div class="option-name">Монако</div>
+                </div>
+                <div class="selection-option" data-road="country">
+                    <div class="option-preview road-country"></div>
+                    <div class="option-name">Тоскана</div>
+                </div>
+                <div class="selection-option" data-road="desert">
+                    <div class="option-preview road-desert"></div>
+                    <div class="option-name">Дубай</div>
+                </div>
+                <div class="selection-option" data-road="winter">
+                    <div class="option-preview road-winter"></div>
+                    <div class="option-name">Альпы</div>
+                </div>
+                <div class="selection-option" data-road="luxury">
+                    <div class="option-preview road-luxury"></div>
+                    <div class="option-name">Роскошь</div>
+                </div>
+                <div class="selection-option" data-road="tech">
+                    <div class="option-preview road-tech"></div>
+                    <div class="option-name">Техно</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="btn-container">
+            <button class="menu-btn" id="start-game">Начать заезд</button>
+            <button class="menu-btn secondary" id="show-leaderboard">Таблица лидеров</button>
+            <button class="menu-btn secondary" id="show-stats">Статистика</button>
+        </div>
+    </div>
+
+    <!-- Таблица лидеров -->
+    <div id="leaderboard-menu">
+        <div class="leaderboard-container">
+            <h2 class="leaderboard-title">🏆 Таблица лидеров 🏆</h2>
+            <div id="leaderboard-content">
+                <ul class="leaderboard-list" id="leaderboard-list">
+                    <!-- Лидерборд будет заполнен JavaScript -->
+                </ul>
+                <div class="leaderboard-stats">
+                    <div class="stat-item">
+                        <div class="stat-value" id="total-players">0</div>
+                        <div class="stat-label">Игроков</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="total-games">0</div>
+                        <div class="stat-label">Всего заездов</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="average-score">0</div>
+                        <div class="stat-label">Средний счёт</div>
+                    </div>
+                </div>
+            </div>
+            <div class="btn-container">
+                <button class="menu-btn" id="close-leaderboard">Назад</button>
+                <button class="menu-btn secondary" id="clear-leaderboard">Очистить</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Игровой интерфейс -->
+    <div id="game-wrapper">
+        <!-- Панель выбора машин в игре -->
+        <div id="car-selection-panel">
+            <div class="car-option selected" data-car="aventador">
+                <div class="car-preview" style="background: linear-gradient(45deg, #ff8c00, #ff6b00)"></div>
+                <div class="car-name">Aventador</div>
+            </div>
+            <div class="car-option" data-car="huracan">
+                <div class="car-preview" style="background: linear-gradient(45deg, #00ff00, #00cc00)"></div>
+                <div class="car-name">Huracan</div>
+            </div>
+            <div class="car-option" data-car="murcielago">
+                <div class="car-preview" style="background: linear-gradient(45deg, #ffd700, #ffed4e)"></div>
+                <div class="car-name">Murcielago</div>
+            </div>
+            <div class="car-option" data-car="sian">
+                <div class="car-preview" style="background: linear-gradient(45deg, #8a2be2, #6a0dad)"></div>
+                <div class="car-name">Sian</div>
+            </div>
+            <div class="car-option" data-car="urus">
+                <div class="car-preview" style="background: linear-gradient(45deg, #2f2f2f, #1a1a1a)"></div>
+                <div class="car-name">Urus</div>
+            </div>
+            <div class="car-option" data-car="countach">
+                <div class="car-preview" style="background: linear-gradient(45deg, #ffffff, #e6e6e6)"></div>
+                <div class="car-name">Countach</div>
+            </div>
+        </div>
+
+        <!-- Верхняя панель с рекордами -->
+        <div id="top-panel">
+            <div class="top-info" id="session-score">Текущий заезд: 0</div>
+            <div class="top-info" id="best-score">Рекорд: 0</div>
+            <div class="top-info" id="games-played">Заездов: 0</div>
+        </div>
+        
+        <!-- Игровое поле -->
+        <div id="game-container" class="road-city-bg">
+            <div id="road" class="road-city"></div>
+            <div id="player-car" class="car-aventador">
+                <div class="car-window"></div>
+                <div class="car-details"></div>
+                <div class="car-headlights left"></div>
+                <div class="car-headlights right"></div>
+                <div class="lambo-logo"></div>
+                <div class="shield-effect" id="shield-effect"></div>
+            </div>
+            <div class="speed-effect" id="speed-effect"></div>
+            
+            <div id="info-panel">
+                <div class="info-item" id="score">Очки: 0</div>
+                <div class="info-item" id="level">Уровень: 1</div>
+                <div class="info-item" id="speed-display">3 км/ч</div>
+                <div class="info-item" id="multiplier-display">x1</div>
+                <div id="active-bonuses"></div>
+            </div>
+            
+            <div id="pause-menu">
+                <h2>ПАУЗА</h2>
+                <div class="controls-info">
+                    <div class="control-item">← → - Смена полосы</div>
+                    <div class="control-item">↑ - Ускорить (+10%)</div>
+                    <div class="control-item">↓ - Замедлить (-10%)</div>
+                    <div class="control-item">Пробел - Пауза/Продолжить</div>
+                    <div class="control-item">Свайпы - для мобильных</div>
+                </div>
+                <button id="resume-btn">Продолжить заезд</button>
+                <button id="back-to-menu">В главное меню</button>
+            </div>
+            
+            <div id="game-over">
+                <h2>ФИНИШ!</h2>
+                <p>Ваш результат: <span id="final-score">0</span> очков</p>
+                <p>Достигнут уровень: <span id="max-level">1</span></p>
+                <p class="level-info">Макс. скорость: <span id="max-speed">3</span> км/ч</p>
+                <p class="level-info">Собрано бонусов: <span id="bonuses-collected">0</span></p>
+                <div id="new-record" class="record-badge" style="display: none;">НОВЫЙ РЕКОРД! 🏆</div>
+                <div id="leaderboard-position" style="display: none; margin: 10px 0;"></div>
+                <button id="restart-btn">Новый заезд!</button>
+                <button id="back-to-menu-end">В главное меню</button>
+            </div>
+        </div>
+        
+        <!-- Панель управления скоростью -->
+        <div id="speed-control-panel">
+            <div id="speed-control">
+                <button class="speed-btn" id="slow-btn">-</button>
+                <div id="current-speed-display">
+                    <div id="current-speed">3 км/ч</div>
+                    <div id="speed-percent">±0%</div>
+                </div>
+                <button class="speed-btn" id="fast-btn">+</button>
+            </div>
+            <div id="speed-level">
+                <div class="speed-dot" id="dot1"></div>
+                <div class="speed-dot" id="dot2"></div>
+                <div class="speed-dot" id="dot3"></div>
+                <div class="speed-dot" id="dot4"></div>
+                <div class="speed-dot" id="dot5"></div>
+            </div>
+        </div>
+
+        <!-- Сенсорные кнопки для мобильных устройств -->
+        <div id="touch-controls">
+            <div class="touch-btn" id="touch-left">←</div>
+            <div class="touch-btn" id="touch-right">→</div>
+        </div>
+    </div>
+
+    <!-- Аудио элементы -->
+    <audio id="engine-sound" loop>
+        <source src="data:audio/mpeg;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAABAAACcQCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////8AAABQTEFNRTMuMTAwBKkAAAAAAAAAADUgJAO8RQAB9AAACHDUR1k+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//sQZAAP8AAAaQAAAAgAAA0gAAABAAABpAAAACAAADSAAAAETEFNRTMuMTAwVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV" type="audio/mpeg">
+    </audio>
+    <audio id="collision-sound">
+        <source src="data:audio/mpeg;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAABAAACcQCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////8AAABQTEFNRTMuMTAwBKkAAAAAAAAAADUgJAO8RQAB9AAACHDUR1k+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//sQZAAP8AAAaQAAAAgAAA0gAAABAAABpAAAACAAADSAAAAETEFNRTMuMTAwVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV" type="audio/mpeg">
+    </audio>
+    <audio id="bonus-sound">
+        <source src="data:audio/mpeg;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAABAAACcQCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////8AAABQTEFNRTMuMTAwBKkAAAAAAAAAADUgJAO8RQAB9AAACHDUR1k+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//sQZAAP8AAAaQAAAAgAAA0gAAABAAABpAAAACAAADSAAAAETEFNRTMuMTAwVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV" type="audio/mpeg">
+    </audio>
+
+    <script>
+        // Обновленная система сохранения с таблицей лидеров (только лучшие результаты)
+        const StorageManager = {
+            getBestScore() {
+                return parseInt(localStorage.getItem('bestScore')) || 0;
+            },
+            
+            setBestScore(score) {
+                localStorage.setItem('bestScore', score.toString());
+            },
+            
+            getGamesPlayed() {
+                return parseInt(localStorage.getItem('gamesPlayed')) || 0;
+            },
+            
+            incrementGamesPlayed() {
+                const games = this.getGamesPlayed() + 1;
+                localStorage.setItem('gamesPlayed', games.toString());
+                return games;
+            },
+            
+            getSelectedCar() {
+                return localStorage.getItem('selectedCar') || 'aventador';
+            },
+            
+            setSelectedCar(carType) {
+                localStorage.setItem('selectedCar', carType);
+            },
+            
+            getSelectedRoad() {
+                return localStorage.getItem('selectedRoad') || 'city';
+            },
+            
+            setSelectedRoad(roadType) {
+                localStorage.setItem('selectedRoad', roadType);
+            },
+            
+            // Таблица лидеров - только лучшие результаты
+            getLeaderboard() {
+                try {
+                    return JSON.parse(localStorage.getItem('leaderboard')) || [];
+                } catch {
+                    return [];
+                }
+            },
+            
+            // Сохраняем только если это новый рекорд для игрока
+            saveToLeaderboard(playerName, score, level, speed, bonuses, car, road) {
+                const leaderboard = this.getLeaderboard();
+                const playerId = this.getPlayerId();
+                const now = new Date().toISOString();
+                
+                // Ищем существующую запись игрока
+                const existingPlayerIndex = leaderboard.findIndex(entry => entry.id === playerId);
+                
+                if (existingPlayerIndex !== -1) {
+                    // Игрок уже есть в таблице - обновляем только если результат лучше
+                    const existingEntry = leaderboard[existingPlayerIndex];
+                    if (score > existingEntry.score) {
+                        // Новый рекорд - обновляем запись
+                        leaderboard[existingPlayerIndex] = {
+                            ...existingEntry,
+                            name: playerName,
+                            score: score,
+                            level: level,
+                            maxSpeed: speed,
+                            bonuses: bonuses,
+                            car: car,
+                            road: road,
+                            date: now,
+                            timestamp: Date.now()
+                        };
+                    } else {
+                        // Результат не лучше - не обновляем
+                        return this.getPlayerPosition(playerId);
+                    }
+                } else {
+                    // Новый игрок - добавляем запись
+                    const entry = {
+                        id: playerId,
+                        name: playerName,
+                        score: score,
+                        level: level,
+                        maxSpeed: speed,
+                        bonuses: bonuses,
+                        car: car,
+                        road: road,
+                        date: now,
+                        timestamp: Date.now()
+                    };
+                    
+                    leaderboard.push(entry);
+                }
+                
+                // Сортируем по очкам (по убыванию) и оставляем топ-50
+                leaderboard.sort((a, b) => b.score - a.score);
+                const topLeaderboard = leaderboard.slice(0, 50);
+                
+                localStorage.setItem('leaderboard', JSON.stringify(topLeaderboard));
+                return this.getPlayerPosition(playerId);
+            },
+            
+            getPlayerId() {
+                let playerId = localStorage.getItem('playerId');
+                if (!playerId) {
+                    playerId = 'player_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                    localStorage.setItem('playerId', playerId);
+                }
+                return playerId;
+            },
+            
+            getPlayerPosition(playerId) {
+                const leaderboard = this.getLeaderboard();
+                const playerIndex = leaderboard.findIndex(entry => entry.id === playerId);
+                return playerIndex !== -1 ? playerIndex + 1 : null;
+            },
+            
+            getPlayerBestScore() {
+                const leaderboard = this.getLeaderboard();
+                const playerId = this.getPlayerId();
+                const playerEntry = leaderboard.find(entry => entry.id === playerId);
+                return playerEntry ? playerEntry.score : 0;
+            },
+            
+            getLeaderboardStats() {
+                const leaderboard = this.getLeaderboard();
+                const totalPlayers = leaderboard.length;
+                const totalGames = this.getGamesPlayed();
+                const averageScore = totalPlayers > 0 ? 
+                    Math.round(leaderboard.reduce((sum, entry) => sum + entry.score, 0) / totalPlayers) : 0;
+                
+                return {
+                    totalPlayers,
+                    totalGames,
+                    averageScore
+                };
+            },
+            
+            clearLeaderboard() {
+                localStorage.removeItem('leaderboard');
+            },
+            
+            getStats() {
+                return {
+                    bestScore: this.getBestScore(),
+                    gamesPlayed: this.getGamesPlayed(),
+                    selectedCar: this.getSelectedCar(),
+                    selectedRoad: this.getSelectedRoad()
+                };
+            }
+        };
+
+        // Элементы интерфейса
+        const mainMenu = document.getElementById('main-menu');
+        const gameWrapper = document.getElementById('game-wrapper');
+        const leaderboardMenu = document.getElementById('leaderboard-menu');
+        const startGameBtn = document.getElementById('start-game');
+        const showLeaderboardBtn = document.getElementById('show-leaderboard');
+        const showStatsBtn = document.getElementById('show-stats');
+        const closeLeaderboardBtn = document.getElementById('close-leaderboard');
+        const clearLeaderboardBtn = document.getElementById('clear-leaderboard');
+        const backToMenuBtns = document.querySelectorAll('#back-to-menu, #back-to-menu-end');
+        
+        const gameContainer = document.getElementById('game-container');
+        const road = document.getElementById('road');
+        const playerCar = document.getElementById('player-car');
+        const scoreElement = document.getElementById('score');
+        const levelElement = document.getElementById('level');
+        const speedDisplayElement = document.getElementById('speed-display');
+        const multiplierDisplayElement = document.getElementById('multiplier-display');
+        const sessionScoreElement = document.getElementById('session-score');
+        const bestScoreElement = document.getElementById('best-score');
+        const gamesPlayedElement = document.getElementById('games-played');
+        const currentSpeedElement = document.getElementById('current-speed');
+        const speedPercentElement = document.getElementById('speed-percent');
+        const speedEffect = document.getElementById('speed-effect');
+        const shieldEffect = document.getElementById('shield-effect');
+        const activeBonusesElement = document.getElementById('active-bonuses');
+        const pauseMenu = document.getElementById('pause-menu');
+        const gameOverScreen = document.getElementById('game-over');
+        const finalScoreElement = document.getElementById('final-score');
+        const maxLevelElement = document.getElementById('max-level');
+        const maxSpeedElement = document.getElementById('max-speed');
+        const bonusesCollectedElement = document.getElementById('bonuses-collected');
+        const newRecordElement = document.getElementById('new-record');
+        const leaderboardPositionElement = document.getElementById('leaderboard-position');
+        const restartBtn = document.getElementById('restart-btn');
+        const resumeBtn = document.getElementById('resume-btn');
+        const slowBtn = document.getElementById('slow-btn');
+        const fastBtn = document.getElementById('fast-btn');
+        const carOptions = document.querySelectorAll('.car-option');
+        const menuCarOptions = document.querySelectorAll('#car-selection .selection-option');
+        const roadOptions = document.querySelectorAll('#road-selection .selection-option');
+        
+        // Элементы таблицы лидеров
+        const leaderboardList = document.getElementById('leaderboard-list');
+        const totalPlayersElement = document.getElementById('total-players');
+        const totalGamesElement = document.getElementById('total-games');
+        const averageScoreElement = document.getElementById('average-score');
+        
+        // Аудио элементы
+        const engineSound = document.getElementById('engine-sound');
+        const collisionSound = document.getElementById('collision-sound');
+        const bonusSound = document.getElementById('bonus-sound');
+        
+        // Сенсорные элементы
+        const touchLeft = document.getElementById('touch-left');
+        const touchRight = document.getElementById('touch-right');
+        const touchControls = document.getElementById('touch-controls');
+        
+        // Элементы индикатора скорости
+        const speedDots = [
+            document.getElementById('dot1'),
+            document.getElementById('dot2'),
+            document.getElementById('dot3'),
+            document.getElementById('dot4'),
+            document.getElementById('dot5')
+        ];
+        
+        // Система уровней скорости - ОБНОВЛЕННЫЕ СКОРОСТИ (замедлены на 35%)
+        const speedLevels = [
+            { baseSpeed: 3, interval: 1300, name: "Медленно" },           // Было 5
+            { baseSpeed: 4, interval: 1215, name: "Немного быстрее" },   // Было 6
+            { baseSpeed: 5, interval: 1134, name: "Средне" },            // Было 8
+            { baseSpeed: 7, interval: 972, name: "Быстро" },             // Было 11
+            { baseSpeed: 10, interval: 810, name: "Очень быстро" },      // Было 15
+            { baseSpeed: 13, interval: 648, name: "Экстрим" }            // Было 20
+        ];
+        
+        // Координаты полос
+        const lanes = [130, 186, 242];
+        
+        // Система бонусов - ОБНОВЛЕННЫЙ БОНУС СКОРОСТИ
+        const bonusTypes = {
+            SLOW_DOWN: { 
+                type: 'slow-down', 
+                duration: 5000, 
+                effect: () => { 
+                    activeBonuses.slowDown = Date.now() + 5000;
+                    createParticles(playerCar, 15, 'spark-particle', '#4169E1');
+                } 
+            },
+            SHIELD: { 
+                type: 'shield', 
+                duration: 8000, 
+                effect: () => { 
+                    activeBonuses.shield = Date.now() + 8000;
+                    shieldEffect.style.display = 'block';
+                    createParticles(playerCar, 20, 'spark-particle', '#00ffff');
+                } 
+            },
+            POINTS: { 
+                type: 'points', 
+                effect: () => { 
+                    score += 50 * scoreMultiplier;
+                    createParticles(playerCar, 10, 'spark-particle', '#00ff00');
+                } 
+            },
+            MULTIPLIER: { 
+                type: 'multiplier', 
+                duration: 10000, 
+                effect: () => { 
+                    activeBonuses.multiplier = Date.now() + 10000;
+                    scoreMultiplier = 2;
+                    multiplierDisplayElement.textContent = `x${scoreMultiplier}`;
+                    multiplierDisplayElement.style.color = '#ff00ff';
+                    createParticles(playerCar, 12, 'spark-particle', '#ff00ff');
+                } 
+            }
+        };
+        
+        // Система усложнений - ОБНОВЛЕННЫЕ ПОРОГИ
+        const complications = [
+            { score: 15, effect: () => obstacleTypes.push('truck'), description: "Появились грузовики!" },
+            { score: 40, effect: () => gameState.rainEffect = true, description: "Начался дождь!" },
+            { score: 60, effect: () => gameState.nightMode = true, description: "Наступила ночь!" },
+            { score: 100, effect: () => gameState.fogEffect = true, description: "Появился туман!" }
+        ];
+        
+        let playerX = 186;
+        let score = 0;
+        let currentLevel = 0;
+        let manualSpeedBoost = 0;
+        let baseSpeed = speedLevels[0].baseSpeed;
+        let actualSpeed = baseSpeed;
+        let obstacleInterval = speedLevels[0].interval;
+        let obstacles = [];
+        let bonuses = [];
+        let gameRunning = false;
+        let gamePaused = false;
+        let animationId;
+        let obstacleTimer;
+        let bonusTimer;
+        let bestScore = 0;
+        let gamesPlayed = 0;
+        let maxLevelReached = 1;
+        let maxSpeedReached = 3;
+        let bonusesCollected = 0;
+        let newRecord = false;
+        let currentCarType = 'aventador';
+        let currentRoadType = 'city';
+        let scoreMultiplier = 1;
+        let playerName = "Гонщик";
+        
+        let obstacleCount = 0;
+        let lastObstacleTime = 0;
+        
+        // Активные бонусы
+        let activeBonuses = {
+            slowDown: 0,  // Изменено с speedBoost на slowDown
+            shield: 0,
+            multiplier: 0
+        };
+        
+        // Состояние игры для усложнений
+        let gameState = {
+            rainEffect: false,
+            nightMode: false,
+            fogEffect: false
+        };
+        
+        // Типы препятствий
+        let obstacleTypes = ['car'];
+        
+        // Пул объектов для препятствий и бонусов
+        const obstaclePool = [];
+        const bonusPool = [];
+        const POOL_SIZE = 15;
+        
+        // ФУНКЦИЯ: Показать таблицу лидеров
+        function showLeaderboard() {
+            mainMenu.style.display = 'none';
+            leaderboardMenu.style.display = 'flex';
+            updateLeaderboardDisplay();
+        }
+        
+        // ФУНКЦИЯ: Закрыть таблицу лидеров
+        function closeLeaderboard() {
+            leaderboardMenu.style.display = 'none';
+            mainMenu.style.display = 'flex';
+        }
+        
+        // ФУНКЦИЯ: Обновить отображение таблицы лидеров
+        function updateLeaderboardDisplay() {
+            const leaderboard = StorageManager.getLeaderboard();
+            const stats = StorageManager.getLeaderboardStats();
+            const currentPlayerId = StorageManager.getPlayerId();
+            const playerBestScore = StorageManager.getPlayerBestScore();
+            
+            // Обновляем статистику
+            totalPlayersElement.textContent = stats.totalPlayers;
+            totalGamesElement.textContent = stats.totalGames;
+            averageScoreElement.textContent = stats.averageScore;
+            
+            // Очищаем список
+            leaderboardList.innerHTML = '';
+            
+            if (leaderboard.length === 0) {
+                const emptyItem = document.createElement('li');
+                emptyItem.className = 'leaderboard-item';
+                emptyItem.innerHTML = `
+                    <div style="text-align: center; color: #888; width: 100%; padding: 20px;">
+                        Таблица лидеров пуста<br>
+                        <small>Сыграйте в игру, чтобы появиться здесь!</small>
+                    </div>
+                `;
+                leaderboardList.appendChild(emptyItem);
+                return;
+            }
+            
+            // Заполняем таблицу лидеров
+            leaderboard.forEach((entry, index) => {
+                const item = document.createElement('li');
+                item.className = 'leaderboard-item';
+                
+                if (entry.id === currentPlayerId) {
+                    item.classList.add('current-player');
+                }
+                
+                const rankClass = index === 0 ? 'rank-1' : 
+                                 index === 1 ? 'rank-2' : 
+                                 index === 2 ? 'rank-3' : '';
+                
+                const date = new Date(entry.date).toLocaleDateString('ru-RU');
+                const isCurrentPlayer = entry.id === currentPlayerId;
+                
+                item.innerHTML = `
+                    <div class="leaderboard-rank ${rankClass}">${index + 1}</div>
+                    <div class="leaderboard-player">
+                        ${entry.name} ${isCurrentPlayer ? '👈' : ''}
+                        <div class="player-stats">
+                            ${date} • ${entry.car} • ${entry.road}<br>
+                            Ур. ${entry.level} • ${entry.maxSpeed}км/ч • ${entry.bonuses} бонусов
+                            ${isCurrentPlayer ? '<br><strong>Ваш лучший результат!</strong>' : ''}
+                        </div>
+                    </div>
+                    <div class="leaderboard-score">
+                        ${entry.score}
+                    </div>
+                `;
+                
+                leaderboardList.appendChild(item);
+            });
+            
+            // Добавляем информацию о текущем игроке, если его нет в топ-50
+            const playerPosition = StorageManager.getPlayerPosition(currentPlayerId);
+            if (!playerPosition && playerBestScore > 0) {
+                const infoItem = document.createElement('li');
+                infoItem.className = 'leaderboard-item';
+                infoItem.style.background = 'rgba(255, 215, 0, 0.1)';
+                infoItem.innerHTML = `
+                    <div style="text-align: center; color: #ffd700; width: 100%; padding: 10px;">
+                        <strong>Ваш лучший результат: ${playerBestScore} очков</strong><br>
+                        <small>Продолжайте играть, чтобы попасть в топ-50!</small>
+                    </div>
+                `;
+                leaderboardList.appendChild(infoItem);
+            }
+        }
+        
+        // ФУНКЦИЯ: Сохранить результат в таблицу лидеров
+        function saveGameResult() {
+            const position = StorageManager.saveToLeaderboard(
+                playerName,
+                score,
+                maxLevelReached,
+                maxSpeedReached,
+                bonusesCollected,
+                currentCarType,
+                currentRoadType
+            );
+            
+            return position;
+        }
+        
+        // ФУНКЦИЯ: Показать позицию в таблице лидеров
+        function showLeaderboardPosition(position) {
+            let message = "";
+            let emoji = "";
+            const playerBestScore = StorageManager.getPlayerBestScore();
+            const isNewBest = score === playerBestScore;
+
+            if (position === 1) {
+                message = "🥇 ВЫ ПЕРВЫЙ В ТАБЛИЦЕ ЛИДЕРОВ!";
+                emoji = "🏆";
+            } else if (position <= 3) {
+                message = `🎉 Вы в топ-${position}! ${getPositionEmoji(position)}`;
+                emoji = "⭐";
+            } else if (position <= 10) {
+                message = `👍 Вы в топ-${position}!`;
+                emoji = "🔥";
+            } else if (position) {
+                message = `📊 Ваша позиция: ${position}`;
+                emoji = "🎯";
+            } else if (isNewBest) {
+                message = "✨ Новый личный рекорд!";
+                emoji = "🚀";
+            } else {
+                message = "💪 Хорошая попытка!";
+                emoji = "🎯";
+            }
+
+            // Добавляем информацию о личном рекорде
+            const bestScoreInfo = playerBestScore > 0 ? 
+                `<div style="font-size: 14px; margin-top: 5px;">Ваш лучший результат: <strong>${playerBestScore}</strong> очков</div>` : 
+                '';
+
+            leaderboardPositionElement.innerHTML = `
+                <div style="background: rgba(255, 140, 0, 0.2); padding: 15px; border-radius: 8px; border: 2px solid #ff8c00;">
+                    <div style="font-size: 16px; font-weight: bold; color: #ffd700;">${emoji} ${message}</div>
+                    ${bestScoreInfo}
+                </div>
+            `;
+            leaderboardPositionElement.style.display = 'block';
+        }
+        
+        function getPositionEmoji(position) {
+            switch(position) {
+                case 1: return "🥇";
+                case 2: return "🥈";
+                case 3: return "🥉";
+                default: return "🎖️";
+            }
+        }
+        
+        // ФУНКЦИЯ: Запрос имени игрока
+        function getPlayerName() {
+            const savedName = localStorage.getItem('playerName');
+            if (savedName) {
+                return savedName;
+            }
+            
+            const name = prompt("Введите ваше имя для таблицы лидеров:", "Гонщик");
+            if (name && name.trim() !== "") {
+                const finalName = name.trim().substring(0, 15);
+                localStorage.setItem('playerName', finalName);
+                return finalName;
+            }
+            return "Гонщик";
+        }
+
+        // Инициализация пула объектов
+        function initObstaclePool() {
+            for (let i = 0; i < POOL_SIZE; i++) {
+                const obstacle = document.createElement('div');
+                obstacle.className = 'obstacle';
+                obstacle.style.display = 'none';
+                
+                const window = document.createElement('div');
+                window.className = 'obstacle-window';
+                obstacle.appendChild(window);
+                
+                gameContainer.appendChild(obstacle);
+                obstaclePool.push({
+                    element: obstacle,
+                    inUse: false,
+                    data: {
+                        element: obstacle,
+                        x: 0,
+                        y: -80,
+                        lane: 0,
+                        type: 'car'
+                    }
+                });
+            }
+            
+            for (let i = 0; i < 8; i++) {
+                const bonus = document.createElement('div');
+                bonus.className = 'bonus';
+                bonus.style.display = 'none';
+                gameContainer.appendChild(bonus);
+                bonusPool.push({
+                    element: bonus,
+                    inUse: false,
+                    data: {
+                        element: bonus,
+                        x: 0,
+                        y: -40,
+                        lane: 0,
+                        type: ''
+                    }
+                });
+            }
+        }
+        
+        // Получение объекта из пула
+        function getFromPool(pool, isBonus = false) {
+            for (let i = 0; i < pool.length; i++) {
+                if (!pool[i].inUse) {
+                    pool[i].inUse = true;
+                    pool[i].element.style.display = 'block';
+                    return pool[i];
+                }
+            }
+            return createNewInPool(pool, isBonus);
+        }
+        
+        function createNewInPool(pool, isBonus) {
+            const element = document.createElement('div');
+            element.className = isBonus ? 'bonus' : 'obstacle';
+            element.style.display = 'block';
+            
+            if (!isBonus) {
+                const window = document.createElement('div');
+                window.className = 'obstacle-window';
+                element.appendChild(window);
+            }
+            
+            gameContainer.appendChild(element);
+            
+            const newObj = {
+                element: element,
+                inUse: true,
+                data: {
+                    element: element,
+                    x: 0,
+                    y: isBonus ? -40 : -80,
+                    lane: 0,
+                    type: isBonus ? '' : 'car'
+                }
+            };
+            
+            pool.push(newObj);
+            return newObj;
+        }
+        
+        // Возврат объекта в пул
+        function returnToPool(pool, obj) {
+            obj.inUse = false;
+            obj.element.style.display = 'none';
+            obj.data.y = obj.element.className === 'bonus' ? -40 : -80;
+        }
+        
+        // ФУНКЦИЯ: Смена машины
+        function changeCar(carType) {
+            currentCarType = carType;
+            StorageManager.setSelectedCar(carType);
+            
+            playerCar.className = '';
+            playerCar.innerHTML = '';
+            
+            const window = document.createElement('div');
+            window.className = 'car-window';
+            playerCar.appendChild(window);
+            
+            const details = document.createElement('div');
+            details.className = 'car-details';
+            playerCar.appendChild(details);
+            
+            const headlightLeft = document.createElement('div');
+            headlightLeft.className = 'car-headlights left';
+            playerCar.appendChild(headlightLeft);
+            
+            const headlightRight = document.createElement('div');
+            headlightRight.className = 'car-headlights right';
+            playerCar.appendChild(headlightRight);
+            
+            const logo = document.createElement('div');
+            logo.className = 'lambo-logo';
+            playerCar.appendChild(logo);
+            
+            const shield = document.createElement('div');
+            shield.className = 'shield-effect';
+            shield.id = 'shield-effect';
+            playerCar.appendChild(shield);
+            
+            playerCar.classList.add(`car-${carType}`);
+            updateSelection(carOptions, carType);
+            updateSelection(menuCarOptions, carType);
+        }
+        
+        // ФУНКЦИЯ: Смена дороги
+        function changeRoad(roadType) {
+            currentRoadType = roadType;
+            StorageManager.setSelectedRoad(roadType);
+            
+            road.className = '';
+            road.classList.add(`road-${roadType}`);
+            updateGameBackground(roadType);
+            updateSelection(roadOptions, roadType);
+        }
+        
+        // ФУНКЦИЯ: Обновление фона игры
+        function updateGameBackground(roadType) {
+            const backgrounds = {
+                'city': 'road-city-bg',
+                'highway': 'road-highway-bg',
+                'night': 'road-night-bg',
+                'country': 'road-country-bg',
+                'desert': 'road-desert-bg',
+                'winter': 'road-winter-bg',
+                'luxury': 'road-luxury-bg',
+                'tech': 'road-tech-bg'
+            };
+            
+            gameContainer.className = 'road-city-bg';
+            gameContainer.classList.add(backgrounds[roadType]);
+        }
+        
+        // ФУНКЦИЯ: Обновление выбранной опции
+        function updateSelection(options, value) {
+            options.forEach(option => {
+                option.classList.remove('selected');
+                if (option.dataset.car === value || option.dataset.road === value) {
+                    option.classList.add('selected');
+                }
+            });
+        }
+        
+        // ФУНКЦИЯ: Показать главное меню
+        function showMainMenu() {
+            mainMenu.style.display = 'flex';
+            gameWrapper.style.display = 'none';
+            leaderboardMenu.style.display = 'none';
+            gameRunning = false;
+            stopAllSounds();
+            if (animationId) cancelAnimationFrame(animationId);
+            if (obstacleTimer) clearInterval(obstacleTimer);
+            if (bonusTimer) clearInterval(bonusTimer);
+        }
+        
+        // ФУНКЦИЯ: Начать игру
+        function startGame() {
+            mainMenu.style.display = 'none';
+            gameWrapper.style.display = 'flex';
+            startGameLogic();
+        }
+        
+        // Звуковая система
+        function playEngineSound() {
+            engineSound.volume = 0.3;
+            engineSound.playbackRate = 0.5 + (actualSpeed / 60) * 0.8;
+            engineSound.play().catch(e => console.log("Audio play failed:", e));
+        }
+        
+        function playCollisionSound() {
+            collisionSound.volume = 0.7;
+            collisionSound.currentTime = 0;
+            collisionSound.play().catch(e => console.log("Audio play failed:", e));
+        }
+        
+        function playBonusSound() {
+            bonusSound.volume = 0.5;
+            bonusSound.currentTime = 0;
+            bonusSound.play().catch(e => console.log("Audio play failed:", e));
+        }
+        
+        function stopAllSounds() {
+            engineSound.pause();
+            collisionSound.pause();
+            bonusSound.pause();
+        }
+        
+        // Система частиц
+        function createParticles(source, count, type, color) {
+            const rect = source.getBoundingClientRect();
+            const containerRect = gameContainer.getBoundingClientRect();
+            
+            for (let i = 0; i < count; i++) {
+                const particle = document.createElement('div');
+                particle.className = `particle ${type}`;
+                particle.style.background = color;
+                particle.style.left = (rect.left - containerRect.left + Math.random() * rect.width) + 'px';
+                particle.style.top = (rect.top - containerRect.top + Math.random() * rect.height) + 'px';
+                
+                if (type === 'smoke-particle') {
+                    particle.style.setProperty('--tx', (Math.random() - 0.5) * 100 + 'px');
+                    particle.style.setProperty('--ty', (Math.random() - 0.5) * 50 - 50 + 'px');
+                }
+                
+                gameContainer.appendChild(particle);
+                
+                setTimeout(() => {
+                    if (particle.parentNode) {
+                        particle.parentNode.removeChild(particle);
+                    }
+                }, type === 'spark-particle' ? 500 : 1500);
+            }
+        }
+        
+        // Следы от шин
+        function createTireMarks() {
+            const marks = document.createElement('div');
+            marks.className = 'tire-mark';
+            marks.style.left = (playerX - 3) + 'px';
+            marks.style.bottom = '25px';
+            gameContainer.appendChild(marks);
+            
+            const marks2 = document.createElement('div');
+            marks2.className = 'tire-mark';
+            marks2.style.left = (playerX + 35) + 'px';
+            marks2.style.bottom = '25px';
+            gameContainer.appendChild(marks2);
+            
+            setTimeout(() => {
+                if (marks.parentNode) marks.parentNode.removeChild(marks);
+                if (marks2.parentNode) marks2.parentNode.removeChild(marks2);
+            }, 2000);
+        }
+        
+        // Обработчики выбора в меню
+        menuCarOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                changeCar(option.dataset.car);
+            });
+        });
+        
+        roadOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                changeRoad(option.dataset.road);
+            });
+        });
+        
+        // Обработчики кнопок
+        startGameBtn.addEventListener('click', startGame);
+        showLeaderboardBtn.addEventListener('click', showLeaderboard);
+        showStatsBtn.addEventListener('click', () => {
+            const stats = StorageManager.getStats();
+            const leaderboardStats = StorageManager.getLeaderboardStats();
+            const playerBestScore = StorageManager.getPlayerBestScore();
+            const playerPosition = StorageManager.getPlayerPosition(StorageManager.getPlayerId());
+            
+            let positionInfo = "";
+            if (playerPosition) {
+                positionInfo = `\nПозиция в таблице лидеров: ${playerPosition}`;
+            } else if (playerBestScore > 0) {
+                positionInfo = `\nВаш лучший результат: ${playerBestScore} (вне топ-50)`;
+            }
+            
+            alert(`Статистика Lamborghini:\n\n` +
+                  `Личный рекорд: ${stats.bestScore}\n` +
+                  `Заездов завершено: ${stats.gamesPlayed}` +
+                  positionInfo + `\n\n` +
+                  `Таблица лидеров:\n` +
+                  `Уникальных игроков: ${leaderboardStats.totalPlayers}\n` +
+                  `Всего заездов: ${leaderboardStats.totalGames}\n` +
+                  `Средний счёт: ${leaderboardStats.averageScore}`);
+        });
+        
+        closeLeaderboardBtn.addEventListener('click', closeLeaderboard);
+        clearLeaderboardBtn.addEventListener('click', () => {
+            if (confirm("Вы уверены, что хотите очистить всю таблицу лидеров? Это действие нельзя отменить.")) {
+                StorageManager.clearLeaderboard();
+                updateLeaderboardDisplay();
+                // Показываем сообщение об успешной очистке
+                const notification = document.createElement('div');
+                notification.textContent = "Таблица лидеров очищена!";
+                notification.style.position = 'fixed';
+                notification.style.top = '50%';
+                notification.style.left = '50%';
+                notification.style.transform = 'translate(-50%, -50%)';
+                notification.style.background = 'rgba(255, 140, 0, 0.9)';
+                notification.style.color = '#000';
+                notification.style.padding = '15px 30px';
+                notification.style.borderRadius = '8px';
+                notification.style.fontWeight = 'bold';
+                notification.style.zIndex = '1002';
+                notification.style.animation = 'fadeInOut 2s forwards';
+                
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 2000);
+            }
+        });
+        
+        backToMenuBtns.forEach(btn => {
+            btn.addEventListener('click', showMainMenu);
+        });
+        
+        // Сенсорное управление
+        let touchStartX = 0;
+        
+        touchLeft.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            movePlayer('left');
+        });
+        
+        touchRight.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            movePlayer('right');
+        });
+        
+        gameContainer.addEventListener('touchstart', (e) => {
+            touchStartX = e.touches[0].clientX;
+        });
+        
+        gameContainer.addEventListener('touchend', (e) => {
+            if (!touchStartX) return;
+            
+            const touchEndX = e.changedTouches[0].clientX;
+            const diffX = touchEndX - touchStartX;
+            
+            if (Math.abs(diffX) > 30) {
+                if (diffX > 0) {
+                    movePlayer('right');
+                } else {
+                    movePlayer('left');
+                }
+            }
+            
+            touchStartX = 0;
+        });
+        
+        function loadStats() {
+            const stats = StorageManager.getStats();
+            bestScore = stats.bestScore;
+            gamesPlayed = stats.gamesPlayed;
+            currentCarType = stats.selectedCar;
+            currentRoadType = stats.selectedRoad;
+            playerName = getPlayerName();
+            updateStatsDisplay();
+            changeCar(currentCarType);
+            changeRoad(currentRoadType);
+        }
+        
+        function updateStatsDisplay() {
+            bestScoreElement.textContent = `Рекорд: ${bestScore}`;
+            gamesPlayedElement.textContent = `Заездов: ${gamesPlayed}`;
+            sessionScoreElement.textContent = `Текущий заезд: ${score}`;
+        }
+        
+        function createRoadMarks() {
+            const road = document.getElementById('road');
+            const existingMarks = road.querySelectorAll('.lane-mark');
+            existingMarks.forEach(mark => mark.remove());
+            
+            for (let i = 0; i < 25; i++) {
+                const mark = document.createElement('div');
+                mark.className = 'lane-mark';
+                mark.style.top = `${i * 50}px`;
+                mark.style.animationDuration = `${2000 / actualSpeed}ms`;
+                road.appendChild(mark);
+            }
+        }
+        
+        function updateRoadMarksAnimation() {
+            const marks = document.querySelectorAll('.lane-mark');
+            marks.forEach(mark => {
+                mark.style.animationDuration = `${2000 / actualSpeed}ms`;
+            });
+        }
+        
+        function updateSpeed() {
+            let extraSpeed = 0;
+            if (currentLevel >= speedLevels.length - 1) {
+                extraSpeed = Math.floor((score - (speedLevels.length - 1) * 8) / 16) * 0.5;
+            }
+            
+            // Бонус замедления - ОБНОВЛЕННЫЙ ЭФФЕКТ
+            if (activeBonuses.slowDown > Date.now()) {
+                extraSpeed -= 3; // Замедление вместо ускорения
+            }
+            
+            actualSpeed = baseSpeed + (baseSpeed * manualSpeedBoost / 100) + extraSpeed;
+            actualSpeed = Math.max(2, actualSpeed);
+            actualSpeed = Math.min(52, actualSpeed); // Максимальная скорость уменьшена
+            
+            currentSpeedElement.textContent = `${Math.round(actualSpeed)} км/ч`;
+            speedDisplayElement.textContent = `${Math.round(actualSpeed)} км/ч`;
+            speedPercentElement.textContent = `${manualSpeedBoost > 0 ? '+' : ''}${manualSpeedBoost}%`;
+            
+            updateSpeedEffects();
+            updateRoadMarksAnimation();
+            maxSpeedReached = Math.max(maxSpeedReached, Math.round(actualSpeed));
+            
+            // Обновление звука двигателя
+            if (gameRunning && !gamePaused) {
+                engineSound.volume = 0.2 + (actualSpeed / 52) * 0.3;
+                engineSound.playbackRate = 0.6 + (actualSpeed / 52) * 0.8;
+            }
+        }
+        
+        function updateSpeedEffects() {
+            const speedIntensity = (actualSpeed - 3) / 49;
+            speedEffect.style.opacity = speedIntensity * 0.4;
+        }
+        
+        function updateSpeedIndicator() {
+            speedDots.forEach((dot, index) => {
+                dot.classList.remove('active', 'super-active');
+                if (index <= currentLevel && index < speedDots.length) {
+                    dot.classList.add('active');
+                    if (index === currentLevel && currentLevel >= 4) {
+                        dot.classList.add('super-active');
+                    }
+                }
+            });
+        }
+        
+        function changeManualSpeed(delta) {
+            manualSpeedBoost += delta;
+            manualSpeedBoost = Math.max(-50, Math.min(50, manualSpeedBoost));
+            updateSpeed();
+        }
+        
+        function createSmartObstacle() {
+            if (gamePaused || !gameRunning) return;
+            
+            const safeLanes = getSafeLanesForNewObstacle();
+            if (safeLanes.length === 0) return;
+            
+            const randomSafeLane = safeLanes[Math.floor(Math.random() * safeLanes.length)];
+            createSingleObstacle(randomSafeLane);
+        }
+        
+        function getSafeLanesForNewObstacle() {
+            const occupiedLanes = new Set();
+            const collisionZoneTop = 350;
+            const collisionZoneBottom = 620;
+            
+            obstacles.forEach(obstacle => {
+                if (obstacle.y + (obstacle.type === 'truck' ? 120 : 80) >= collisionZoneTop && obstacle.y <= collisionZoneBottom) {
+                    occupiedLanes.add(obstacle.lane);
+                }
+            });
+            
+            const safeLanes = [];
+            for (let lane = 0; lane < 3; lane++) {
+                if (!occupiedLanes.has(lane)) safeLanes.push(lane);
+            }
+            return safeLanes;
+        }
+        
+        function createSingleObstacle(laneIndex) {
+            const poolObstacle = getFromPool(obstaclePool);
+            const selectedLane = lanes[laneIndex];
+            const obstacleType = obstacleTypes[Math.floor(Math.random() * obstacleTypes.length)];
+            
+            poolObstacle.element.className = `obstacle lane-${laneIndex} ${obstacleType}`;
+            poolObstacle.element.style.left = `${selectedLane}px`;
+            poolObstacle.element.style.top = obstacleType === 'truck' ? '-120px' : '-80px';
+            poolObstacle.element.style.display = 'block';
+            
+            poolObstacle.data.x = selectedLane;
+            poolObstacle.data.y = obstacleType === 'truck' ? -120 : -80;
+            poolObstacle.data.lane = laneIndex;
+            poolObstacle.data.type = obstacleType;
+            
+            obstacles.push(poolObstacle.data);
+        }
+        
+        // ФУНКЦИЯ: Создание бонусов - ОБНОВЛЕННЫЙ ШАНС 14%
+        function createBonus() {
+            if (gamePaused || !gameRunning || Math.random() > 0.14) return; // Было 0.07, стало 0.14
+            
+            const safeLanes = getSafeLanesForNewObstacle();
+            if (safeLanes.length === 0) return;
+            
+            const randomSafeLane = safeLanes[Math.floor(Math.random() * safeLanes.length)];
+            const selectedLane = lanes[randomSafeLane];
+            const bonusKeys = Object.keys(bonusTypes);
+            const randomBonus = bonusTypes[bonusKeys[Math.floor(Math.random() * bonusKeys.length)]];
+            
+            const poolBonus = getFromPool(bonusPool, true);
+            poolBonus.element.className = `bonus ${randomBonus.type}`;
+            poolBonus.element.style.left = `${selectedLane}px`;
+            poolBonus.element.style.top = '-40px';
+            poolBonus.element.style.display = 'block';
+            
+            poolBonus.data.x = selectedLane;
+            poolBonus.data.y = -40;
+            poolBonus.data.lane = randomSafeLane;
+            poolBonus.data.type = randomBonus.type;
+            
+            bonuses.push(poolBonus.data);
+        }
+        
+        function moveObstacles() {
+            for (let i = obstacles.length - 1; i >= 0; i--) {
+                const obstacle = obstacles[i];
+                obstacle.y += actualSpeed;
+                obstacle.element.style.top = `${obstacle.y}px`;
+                
+                if (obstacle.y > 620) {
+                    const poolIndex = obstaclePool.findIndex(item => item.data === obstacle);
+                    if (poolIndex !== -1) {
+                        returnToPool(obstaclePool, obstaclePool[poolIndex]);
+                    }
+                    obstacles.splice(i, 1);
+                    score += scoreMultiplier;
+                    scoreElement.textContent = `Очки: ${score}`;
+                    updateSpeedLevel();
+                    checkComplications();
+                }
+                
+                if (checkCollision(playerCar, obstacle.element)) {
+                    if (activeBonuses.shield > Date.now()) {
+                        // Щит активен - уничтожаем препятствие
+                        createParticles(obstacle.element, 8, 'explosion-particle', '#ff4400');
+                        const poolIndex = obstaclePool.findIndex(item => item.data === obstacle);
+                        if (poolIndex !== -1) {
+                            returnToPool(obstaclePool, obstaclePool[poolIndex]);
+                        }
+                        obstacles.splice(i, 1);
+                        score += 5 * scoreMultiplier;
+                    } else {
+                        endGame();
+                        return;
+                    }
+                }
+            }
+        }
+        
+        function moveBonuses() {
+            for (let i = bonuses.length - 1; i >= 0; i--) {
+                const bonus = bonuses[i];
+                bonus.y += actualSpeed;
+                bonus.element.style.top = `${bonus.y}px`;
+                
+                if (bonus.y > 620) {
+                    const poolIndex = bonusPool.findIndex(item => item.data === bonus);
+                    if (poolIndex !== -1) {
+                        returnToPool(bonusPool, bonusPool[poolIndex]);
+                    }
+                    bonuses.splice(i, 1);
+                }
+                
+                if (checkCollision(playerCar, bonus.element)) {
+                    collectBonus(bonus);
+                    const poolIndex = bonusPool.findIndex(item => item.data === bonus);
+                    if (poolIndex !== -1) {
+                        returnToPool(bonusPool, bonusPool[poolIndex]);
+                    }
+                    bonuses.splice(i, 1);
+                }
+            }
+        }
+        
+        function collectBonus(bonus) {
+            playBonusSound();
+            bonusesCollected++;
+            const bonusType = Object.values(bonusTypes).find(b => b.type === bonus.type);
+            if (bonusType) {
+                bonusType.effect();
+                createParticles(bonus.element, 15, 'spark-particle', getBonusColor(bonus.type));
+                updateActiveBonusesDisplay();
+            }
+        }
+        
+        function getBonusColor(bonusType) {
+            switch(bonusType) {
+                case 'slow-down': return '#4169E1'; // Синий цвет для замедления
+                case 'shield': return '#00ffff';
+                case 'points': return '#00ff00';
+                case 'multiplier': return '#ff00ff';
+                default: return '#ffffff';
+            }
+        }
+        
+        function updateActiveBonusesDisplay() {
+            activeBonusesElement.innerHTML = '';
+            const now = Date.now();
+            
+            if (activeBonuses.slowDown > now) {
+                const bonusElement = createBonusElement('slow-down', 'Замедление', activeBonuses.slowDown - now, 5000);
+                activeBonusesElement.appendChild(bonusElement);
+            }
+            
+            if (activeBonuses.shield > now) {
+                const bonusElement = createBonusElement('shield', 'Щит', activeBonuses.shield - now, 8000);
+                activeBonusesElement.appendChild(bonusElement);
+            }
+            
+            if (activeBonuses.multiplier > now) {
+                const bonusElement = createBonusElement('multiplier', 'x2 Очки', activeBonuses.multiplier - now, 10000);
+                activeBonusesElement.appendChild(bonusElement);
+            }
+        }
+        
+        function createBonusElement(type, name, timeLeft, totalTime) {
+            const element = document.createElement('div');
+            element.className = 'active-bonus';
+            
+            const icon = document.createElement('div');
+            icon.className = 'bonus-icon';
+            icon.textContent = getBonusIcon(type);
+            icon.style.color = getBonusColor(type);
+            
+            const timer = document.createElement('div');
+            timer.className = 'bonus-timer';
+            
+            const timerFill = document.createElement('div');
+            timerFill.className = 'bonus-timer-fill';
+            timerFill.style.width = `${(timeLeft / totalTime) * 100}%`;
+            timerFill.style.background = getBonusColor(type);
+            
+            timer.appendChild(timerFill);
+            element.appendChild(icon);
+            element.appendChild(timer);
+            
+            return element;
+        }
+        
+        function getBonusIcon(type) {
+            switch(type) {
+                case 'slow-down': return '🐌'; // Иконка улитки для замедления
+                case 'shield': return '🛡️';
+                case 'multiplier': return '✨';
+                default: return '★';
+            }
+        }
+        
+        function checkComplications() {
+            complications.forEach(comp => {
+                if (score >= comp.score && !comp.activated) {
+                    comp.effect();
+                    comp.activated = true;
+                    showNotification(comp.description);
+                }
+            });
+        }
+        
+        function showNotification(text) {
+            const notification = document.createElement('div');
+            notification.textContent = text;
+            notification.style.position = 'absolute';
+            notification.style.top = '50%';
+            notification.style.left = '50%';
+            notification.style.transform = 'translate(-50%, -50%)';
+            notification.style.background = 'rgba(255, 140, 0, 0.9)';
+            notification.style.color = '#000';
+            notification.style.padding = '10px 20px';
+            notification.style.borderRadius = '8px';
+            notification.style.fontWeight = 'bold';
+            notification.style.zIndex = '100';
+            notification.style.animation = 'fadeInOut 3s forwards';
+            
+            gameContainer.appendChild(notification);
+            
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 3000);
+        }
+        
+        function checkCollision(player, element) {
+            const playerRect = player.getBoundingClientRect();
+            const elementRect = element.getBoundingClientRect();
+            
+            return !(
+                playerRect.right < elementRect.left ||
+                playerRect.left > elementRect.right ||
+                playerRect.bottom < elementRect.top ||
+                playerRect.top > elementRect.bottom
+            );
+        }
+        
+        function updateSpeedLevel() {
+            const newLevel = Math.min(Math.floor(score / 8), speedLevels.length - 1);
+            if (newLevel > currentLevel) {
+                currentLevel = newLevel;
+                baseSpeed = speedLevels[currentLevel].baseSpeed;
+                obstacleInterval = speedLevels[currentLevel].interval;
+                maxLevelReached = Math.max(maxLevelReached, currentLevel + 1);
+                
+                clearInterval(obstacleTimer);
+                obstacleTimer = setInterval(createSmartObstacle, obstacleInterval);
+                
+                levelElement.textContent = `Уровень: ${currentLevel + 1}`;
+                updateSpeedIndicator();
+                
+                playerCar.style.transform = 'scale(1.1)';
+                setTimeout(() => {
+                    playerCar.style.transform = 'scale(1)';
+                }, 200);
+            }
+            
+            updateSpeed();
+            updateStatsDisplay();
+        }
+        
+        function movePlayer(direction) {
+            if (!gameRunning || gamePaused) return;
+            
+            createTireMarks();
+            createParticles(playerCar, 3, 'smoke-particle', '#666');
+            
+            if (direction === 'left' && playerX > lanes[0]) {
+                playerX -= 56;
+            } else if (direction === 'right' && playerX < lanes[2]) {
+                playerX += 56;
+            }
+            
+            playerCar.style.left = `${playerX}px`;
+        }
+        
+        function togglePause() {
+            if (!gameRunning) return;
+            
+            gamePaused = !gamePaused;
+            
+            if (gamePaused) {
+                pauseMenu.style.display = 'flex';
+                document.querySelectorAll('.lane-mark').forEach(mark => {
+                    mark.style.animationPlayState = 'paused';
+                });
+                engineSound.pause();
+            } else {
+                pauseMenu.style.display = 'none';
+                document.querySelectorAll('.lane-mark').forEach(mark => {
+                    mark.style.animationPlayState = 'running';
+                });
+                playEngineSound();
+                gameLoop();
+            }
+        }
+        
+        function updateActiveBonuses() {
+            const now = Date.now();
+            
+            // Проверка истекших бонусов
+            if (activeBonuses.slowDown > 0 && activeBonuses.slowDown <= now) {
+                activeBonuses.slowDown = 0;
+            }
+            
+            if (activeBonuses.shield > 0 && activeBonuses.shield <= now) {
+                activeBonuses.shield = 0;
+                shieldEffect.style.display = 'none';
+            }
+            
+            if (activeBonuses.multiplier > 0 && activeBonuses.multiplier <= now) {
+                activeBonuses.multiplier = 0;
+                scoreMultiplier = 1;
+                multiplierDisplayElement.textContent = `x${scoreMultiplier}`;
+                multiplierDisplayElement.style.color = '#ffd700';
+            }
+            
+            updateActiveBonusesDisplay();
+        }
+        
+        function gameLoop() {
+            if (!gameRunning || gamePaused) return;
+            
+            moveObstacles();
+            moveBonuses();
+            updateActiveBonuses();
+            
+            animationId = requestAnimationFrame(gameLoop);
+        }
+        
+        function endGame() {
+            gameRunning = false;
+            gamePaused = false;
+            cancelAnimationFrame(animationId);
+            clearInterval(obstacleTimer);
+            clearInterval(bonusTimer);
+            
+            playCollisionSound();
+            createParticles(playerCar, 20, 'explosion-particle', '#ff4400');
+            stopAllSounds();
+            
+            document.querySelectorAll('.lane-mark').forEach(mark => {
+                mark.style.animationPlayState = 'paused';
+            });
+            
+            checkAndSaveRecord();
+            
+            finalScoreElement.textContent = score;
+            maxLevelElement.textContent = maxLevelReached;
+            maxSpeedElement.textContent = maxSpeedReached;
+            bonusesCollectedElement.textContent = bonusesCollected;
+            gameOverScreen.style.display = 'flex';
+        }
+        
+        function checkAndSaveRecord() {
+            let isNewBest = false;
+            
+            if (score > bestScore) {
+                bestScore = score;
+                StorageManager.setBestScore(bestScore);
+                newRecord = true;
+                newRecordElement.style.display = 'block';
+                isNewBest = true;
+            } else {
+                newRecord = false;
+                newRecordElement.style.display = 'none';
+            }
+            
+            // Сохраняем в таблицу лидеров и показываем позицию
+            const leaderboardPosition = saveGameResult();
+            showLeaderboardPosition(leaderboardPosition);
+            
+            gamesPlayed = StorageManager.incrementGamesPlayed();
+            updateStatsDisplay();
+        }
+        
+        function startGameLogic() {
+            playerX = 186;
+            score = 0;
+            currentLevel = 0;
+            manualSpeedBoost = 0;
+            baseSpeed = speedLevels[0].baseSpeed;
+            actualSpeed = baseSpeed;
+            obstacleInterval = speedLevels[0].interval;
+            obstacles = [];
+            bonuses = [];
+            gameRunning = true;
+            gamePaused = false;
+            maxLevelReached = 1;
+            maxSpeedReached = 3;
+            bonusesCollected = 0;
+            scoreMultiplier = 1;
+            obstacleCount = 0;
+            lastObstacleTime = 0;
+            
+            // Сброс активных бонусов
+            activeBonuses = {
+                slowDown: 0,  // Изменено с speedBoost на slowDown
+                shield: 0,
+                multiplier: 0
+            };
+            
+            // Сброс состояния игры
+            gameState = {
+                rainEffect: false,
+                nightMode: false,
+                fogEffect: false
+            };
+            
+            // Сброс типов препятствий
+            obstacleTypes = ['car'];
+            
+            // Сброс усложнений
+            complications.forEach(comp => comp.activated = false);
+            
+            playerCar.style.left = `${playerX}px`;
+            playerCar.style.transform = 'scale(1)';
+            scoreElement.textContent = `Очки: ${score}`;
+            levelElement.textContent = `Уровень: 1`;
+            speedDisplayElement.textContent = `3 км/ч`;
+            currentSpeedElement.textContent = `3 км/ч`;
+            speedPercentElement.textContent = `±0%`;
+            multiplierDisplayElement.textContent = `x1`;
+            multiplierDisplayElement.style.color = '#ffd700';
+            speedEffect.style.opacity = '0';
+            shieldEffect.style.display = 'none';
+            activeBonusesElement.innerHTML = '';
+            pauseMenu.style.display = 'none';
+            gameOverScreen.style.display = 'none';
+            newRecordElement.style.display = 'none';
+            leaderboardPositionElement.style.display = 'none';
+            
+            // Возвращаем все объекты в пулы
+            obstaclePool.forEach(obstacle => {
+                obstacle.inUse = false;
+                obstacle.element.style.display = 'none';
+            });
+            
+            bonusPool.forEach(bonus => {
+                bonus.inUse = false;
+                bonus.element.style.display = 'none';
+            });
+            
+            updateSpeedIndicator();
+            updateSpeed();
+            updateStatsDisplay();
+            
+            createRoadMarks();
+            playEngineSound();
+            gameLoop();
+            
+            clearInterval(obstacleTimer);
+            obstacleTimer = setInterval(createSmartObstacle, obstacleInterval);
+            
+            clearInterval(bonusTimer);
+            bonusTimer = setInterval(createBonus, 1000);
+        }
+        
+        // Обработчики управления в игре
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') {
+                movePlayer('left');
+            } else if (e.key === 'ArrowRight') {
+                movePlayer('right');
+            } else if (e.key === 'ArrowUp') {
+                changeManualSpeed(10);
+            } else if (e.key === 'ArrowDown') {
+                changeManualSpeed(-10);
+            } else if (e.key === ' ') {
+                e.preventDefault();
+                togglePause();
+            }
+        });
+        
+        slowBtn.addEventListener('click', () => changeManualSpeed(-10));
+        fastBtn.addEventListener('click', () => changeManualSpeed(10));
+        restartBtn.addEventListener('click', startGameLogic);
+        resumeBtn.addEventListener('click', togglePause);
+        
+        // Обработчики выбора машин в игре
+        carOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                changeCar(option.dataset.car);
+            });
+        });
+        
+        // Загрузка игры
+        window.onload = function() {
+            loadStats();
+            initObstaclePool();
+            
+            // Добавляем стили для анимации уведомлений
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes fadeInOut {
+                    0% { opacity: 0; transform: translate(-50%, -40%); }
+                    20% { opacity: 1; transform: translate(-50%, -50%); }
+                    80% { opacity: 1; transform: translate(-50%, -50%); }
+                    100% { opacity: 0; transform: translate(-50%, -60%); }
+                }
+            `;
+            document.head.appendChild(style);
+        };
+    </script>
+</body>
+</html>
